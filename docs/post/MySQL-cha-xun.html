@@ -27,7 +27,7 @@ vacchar(10)      'ABC'             不定长，**效率偏低**
 <meta property="og:url" content="https://yhycc1.github.io/post/MySQL-cha-xun.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/140154626?v=4">
 <title>MySQL查询</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -51,7 +51,17 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     body {padding: 8px;}
     .postTitle{font-size:24px;}
 }
-
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
 </style>
 
 
@@ -129,7 +139,7 @@ age int 约束;<br>
 <code class="notranslate">select distinct gender from students;</code></p>
 <h2>2.条件</h2>
 <h3>比较运算符</h3>
-<p>==<strong>select ...from 表名 where</strong>==<br>
+<p><strong>select ... from 表名 where</strong><br>
 --查询大于18岁的信息<br>
 <code class="notranslate">select * from students where age&gt;18;</code><br>
 <code class="notranslate">select id,name,gender from students where age&gt;18;</code><br>
@@ -140,25 +150,25 @@ age int 约束;<br>
 <code class="notranslate">select * from students where age=18;</code><br>
 -!=或者&lt;&gt;</p>
 <h3>逻辑运算符</h3>
-<p>--==<strong>and</strong>==<br>
---18到28之间的所有学生信息<br>
+<h4><strong>and</strong></h4>
+<p>--18到28之间的所有学生信息<br>
 <code class="notranslate">select * fromn students where age&gt;18 and age&lt;28;</code><br>
 --失败select * from students where age&gt;18 and &lt;28;<br>
 --18岁以上的女性<br>
 <code class="notranslate">select * from students where age&gt;18 and gender="女";</code><br>
-<code class="notranslate">select * from students where age&gt;18 and gender=2;</code><br>
---==<strong>or</strong>==<br>
---18以上或者身高查过180（包含）以上<br>
-<code class="notranslate">select * from studentss where age&gt;188 or height&gt;=180;</code><br>
---==<strong>not</strong>==<br>
---不在 18岁以上的女性 这个范围内的信息<br>
+<code class="notranslate">select * from students where age&gt;18 and gender=2;</code></p>
+<h4><strong>or</strong></h4>
+<p>--18以上或者身高查过180（包含）以上<br>
+<code class="notranslate">select * from studentss where age&gt;188 or height&gt;=180;</code></p>
+<h4><strong>not</strong></h4>
+<p>--不在 18岁以上的女性 这个范围内的信息<br>
 <code class="notranslate">select * from students where not age&gt;18 and gender=2;</code><br>
 <code class="notranslate">select * from students where not (age&gt;18 and gender=2);</code><br>
 --年龄不是小于或者等于18 并且是女性<br>
 <code class="notranslate">select * from students wheree（not age&lt;=18)and gender=2;</code></p>
 <h3>模糊查询</h3>
-<p>--==<strong>like</strong>==<br>
---%替换1个或者多个<br>
+<h4><strong>like</strong></h4>
+<p>-- <strong>%</strong> 替换1个或者多个<br>
 --替换1个<br>
 --查询姓名中以“小”开始的名字<br>
 <code class="notranslate">select name from students where name="小";</code><br>
@@ -169,55 +179,66 @@ age int 约束;<br>
 <code class="notranslate">select name from students where name like "_";</code><br>
 --查询有3个字的名字<br>
 <code class="notranslate">select name from students where name like"_";</code><br>
---==查询至少有2个字的名字==<br>
+--<strong>查询至少有2个字的名字</strong><br>
 <code class="notranslate">select name from students where name like"_%";</code><br>
-``<br>
---<strong>rlike 正则</strong><br>
---查询以 周开始的姓名<br>
+``</p>
+<h4><strong>rlike 正则</strong></h4>
+<p>--查询以 周开始的姓名<br>
 <code class="notranslate">select name from students where name like"^周.*";</code><br>
 --查询以 周开始、伦结尾的姓名<br>
-`select name from students where name like"^周.*伦$";`</p>
+<code class="notranslate">select name from students where name like"^周.*伦$";</code></p>
 <h3>范围查询</h3>
-<p>-- ==<strong>in(1,3,8)</strong>== 表示在一个非连续的范围内<br>
+<h4><strong>in(1,3,8)</strong></h4>
+<p><strong>int()</strong> 表示在一个非连续的范围内<br>
 --查询年龄在18、34的姓名<br>
-<code class="notranslate">select name,age from students where age in(18,34);</code><br>
---==<strong>between</strong>...<strong>and</strong>==...表示在一个连续的范围内<br>
+<code class="notranslate">select name,age from students where age in(18,34);</code></p>
+<h4><strong>between</strong>...<strong>and</strong>...</h4>
+<p><strong>between</strong>... <strong>and</strong> ...表示在一个连续的范围内<br>
 --查询 年龄在18到34之间的的信息<br>
 <code class="notranslate">select name,age from students where age between 18 and 34;</code><br>
 --not between...and...表示不在一个连续的范围内<br>
 查询 年龄不在在18到34之间的的信息<br>
-select from students where age ==not between== 18 and 34;<br>
---==<strong>空判断</strong>== <code class="notranslate">is null</code><br>
---查询身高为空的信息<br>
+select from students where age not between 18 and 34;</p>
+<h4><strong>空判断</strong> is null</h4>
+<p>--查询身高为空的信息<br>
 <code class="notranslate">select * from students where height is null;</code><br>
 <code class="notranslate">select * from students where height is not null;</code></p>
-<h2>3.排序</h2>
+<h2><strong>3.排序</strong></h2>
+<p><strong>order by</strong>   <strong>asc</strong>从小到大 , <strong>desc</strong>从大到小</p>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span>查询18到34岁的男性，按照年龄从小到大排序</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">where</span> (age between <span class="pl-c1">18</span> <span class="pl-k">and</span> <span class="pl-c1">34</span>) <span class="pl-k">and</span> gender <span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-k">order by</span> age acs;
+<span class="pl-c"><span class="pl-c">--</span>查询18到34岁的男性，按照身高从大到小排序</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">where</span> (age between <span class="pl-c1">18</span> <span class="pl-k">and</span> <span class="pl-c1">34</span>) <span class="pl-k">and</span> gender <span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-k">order by</span> height <span class="pl-k">desc</span>
+<span class="pl-c"><span class="pl-c">--</span>查询18到34岁的男性，按照身高从大到小排序，如果身高相同的情况下按照年龄从小到大排序</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">where</span> (age between <span class="pl-c1">18</span> <span class="pl-k">and</span> <span class="pl-c1">34</span>) <span class="pl-k">and</span> gender <span class="pl-k">=</span> <span class="pl-c1">1</span> <span class="pl-k">order by</span> height <span class="pl-k">desc</span>,age acs;
+<span class="pl-c"><span class="pl-c">--</span>按照年龄从小到大、身高从高到矮的排序</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">order by</span> age <span class="pl-k">asc</span>, height <span class="pl-k">desc</span>;</pre></div>
 <h2>4.聚合函数</h2>
-<h3>==count==(总数)</h3>
-<p>--查询男性有多少人，女性有多少人<br>
-<code class="notranslate">select count(*) as 男性人数 from students where gender = 1;</code><br>
-<code class="notranslate">select count(*) as 女性人数 from students where gender = 2;</code></p>
+<h3>count(总数)</h3>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span>查询男性有多少人，女性有多少人</span>
+<span class="pl-k">select</span> <span class="pl-c1">count</span>(<span class="pl-k">*</span>) <span class="pl-k">as</span> 男性人数 <span class="pl-k">from</span> students <span class="pl-k">where</span> gender <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+<span class="pl-k">select</span> <span class="pl-c1">count</span>(<span class="pl-k">*</span>) <span class="pl-k">as</span> 女性人数 <span class="pl-k">from</span> students <span class="pl-k">where</span> gender <span class="pl-k">=</span> <span class="pl-c1">2</span>;</pre></div>
 <h3>max</h3>
-<p>--查询最大年龄<br>
-<code class="notranslate">select max(age) from students;</code></p>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span>查询最大年龄</span>
+<span class="pl-k">select</span> <span class="pl-c1">max</span>(age) <span class="pl-k">from</span> students;</pre></div>
 <h3>min</h3>
-<p>--查询女性的最小身高<br>
-<code class="notranslate">select min(hegiht) from students where gender = 2</code></p>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span>查询女性的最小身高</span>
+<span class="pl-k">select</span> <span class="pl-c1">min</span>(hegiht) <span class="pl-k">from</span> students <span class="pl-k">where</span> gender <span class="pl-k">=</span> <span class="pl-c1">2</span></pre></div>
 <h3>sum</h3>
-<p>--计算所有人的年龄之和<br>
-<code class="notranslate">select sum(age) from students;</code></p>
-<h3>==avg==</h3>
-<p>--计算平均年龄<br>
-<code class="notranslate">select avg(age) from students;</code><br>
---计算平均年龄<br>
-<code class="notranslate">select sum(age)/count(*) from students;</code></p>
-<h3>==<strong>round</strong>==</h3>
-<p>--四舍五入 round（123.23，1）保留1位小数 123.2<br>
---计算所有人的平均年龄，保留2位小数<br>
-<code class="notranslate">select round(avg(age),2) from students;</code><br>
---计算男性的平均身高,保留2位小数<br>
-<code class="notranslate">select round(avg(height),2) from students where gender = 2;</code></p>
-<h2>5.分组</h2>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span>计算所有人的年龄之和</span>
+<span class="pl-k">select</span> <span class="pl-c1">sum</span>(age) <span class="pl-k">from</span> students;</pre></div>
+<h3>avg</h3>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span>计算平均年龄</span>
+<span class="pl-k">select</span> <span class="pl-c1">avg</span>(age) <span class="pl-k">from</span> students;
+<span class="pl-c"><span class="pl-c">--</span>计算平均年龄</span>
+<span class="pl-k">select</span> <span class="pl-c1">sum</span>(age)<span class="pl-k">/</span><span class="pl-c1">count</span>(<span class="pl-k">*</span>) <span class="pl-k">from</span> students;</pre></div>
+<h3>round</h3>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span>四舍五入 round（123.23，1）保留1位小数 123.2</span>
+<span class="pl-c"><span class="pl-c">--</span>计算所有人的平均年龄，保留2位小数</span>
+<span class="pl-k">select</span> round(<span class="pl-c1">avg</span>(age),<span class="pl-c1">2</span>) <span class="pl-k">from</span> students;
+<span class="pl-c"><span class="pl-c">--</span>计算男性的平均身高,保留2位小数</span>
+<span class="pl-k">select</span> round(<span class="pl-c1">avg</span>(height),<span class="pl-c1">2</span>) <span class="pl-k">from</span> students <span class="pl-k">where</span> gender <span class="pl-k">=</span> <span class="pl-c1">2</span>;</pre></div>
+<h2><strong>5.分组</strong></h2>
 <h3><strong>group by</strong></h3>
 <p>--按照性别分组，查询所有的性别<br>
 <del><code class="notranslate">select name from students group by gender;</code><br>
@@ -229,15 +250,38 @@ select from students where age ==not between== 18 and 34;<br>
 --计算男性的人数<br>
 <code class="notranslate">select gender,count( * ) from students where gender=1 group by gender;</code></p>
 <h3><strong>group_concat</strong>(...)</h3>
-<p>--查询同种性别中的姓名(男性)<br>
-<code class="notranslate">select gender,group_concat(name) from students where gender=1 group by gender;</code><br>
-<code class="notranslate">select gender,group_concat(name, age, id) from students where gender=1 group by gender;</code><br>
-<code class="notranslate">select gender,group_concat(name,", age, "", id） from students where gender=1 group bygender;</code></p>
-<h3>having</h3>
-<p>--查询平均年龄超过30岁的性别，以及姓名 having avg（age）&gt;30<br>
-<code class="notranslate">select gender, group_concat(name),avg(age) from students group by gender having avg(age)&gt;30;</code><br>
---查询每种性别中的人数多于2个的信息<br>
-<code class="notranslate">select gender,group_concat(name) from students group by gender having count(*)&gt;2;</code></p></div>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span>查询同种性别中的姓名(男性)</span>
+<span class="pl-k">select</span> gender,group_concat(name) <span class="pl-k">from</span> students <span class="pl-k">where</span> gender<span class="pl-k">=</span><span class="pl-c1">1</span> <span class="pl-k">group by</span> gender;
+<span class="pl-k">select</span> gender,group_concat(name, age, id) <span class="pl-k">from</span> students <span class="pl-k">where</span> gender<span class="pl-k">=</span><span class="pl-c1">1</span> <span class="pl-k">group by</span> gender;
+<span class="pl-k">select</span> gender,group_concat(name,<span class="pl-s"><span class="pl-pds">"</span>, age, <span class="pl-pds">"</span><span class="pl-pds">"</span>, id） from students where gender=1 group bygender;</span></pre></div>
+<h3>having（后面不接where）</h3>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span>查询平均年龄超过30岁的性别，以及姓名 having avg（age）&gt;30</span>
+<span class="pl-k">select</span> gender, group_concat(name),<span class="pl-c1">avg</span>(age) <span class="pl-k">from</span> students <span class="pl-k">group by</span> gender <span class="pl-k">having</span> <span class="pl-c1">avg</span>(age)<span class="pl-k">&gt;</span><span class="pl-c1">30</span>;
+<span class="pl-c"><span class="pl-c">--</span>查询每种性别中的人数多于2个的信息</span>
+<span class="pl-k">select</span> gender,group_concat(name) <span class="pl-k">from</span> students <span class="pl-k">group by</span> gender <span class="pl-k">having</span> <span class="pl-c1">count</span>(<span class="pl-k">*</span>)<span class="pl-k">&gt;</span><span class="pl-c1">2</span>;</pre></div>
+<h2><strong>6.分页</strong></h2>
+<h3>limit  start,count</h3>
+<div class="highlight highlight-source-sql"><pre class="notranslate"><span class="pl-c"><span class="pl-c">--</span>限制查询出来的数据个数(显示查出来的个数)</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">where</span> gender<span class="pl-k">=</span><span class="pl-c1">1</span> <span class="pl-k">limit</span> <span class="pl-c1">2</span>;
+<span class="pl-c"><span class="pl-c">--</span>查询前5个数据</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">limit</span> <span class="pl-c1">0</span>,<span class="pl-c1">5</span>;
+<span class="pl-c"><span class="pl-c">--</span>查询id 6-10（包含）的书序</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">limit</span> <span class="pl-c1">5</span>,<span class="pl-c1">5</span>;
+<span class="pl-c"><span class="pl-c">--</span>每页显示2个，第1个页面</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">limit</span> <span class="pl-c1">0</span>,<span class="pl-c1">2</span>;
+<span class="pl-c"><span class="pl-c">--</span>每页显示2个，第2个页面</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">limit</span> <span class="pl-c1">2</span>,<span class="pl-c1">2</span>;
+<span class="pl-c"><span class="pl-c">--</span>每页显示2个，第3个页面</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">limit</span> <span class="pl-c1">4</span>,<span class="pl-c1">2</span>;
+<span class="pl-c"><span class="pl-c">--</span>每页显示2个，第4个页面</span>
+<span class="pl-k">select</span> <span class="pl-k">*</span> <span class="pl-k">from</span> students <span class="pl-k">limit</span> <span class="pl-c1">6</span>,<span class="pl-c1">2</span>;</pre></div>
+<p><strong>规律</strong>：*limit（第N页-1）<em>每个的个每页的个数</em>；</p>
+<p>每页显示2个，显示第6页的信息，按照年龄从小到大排序<br>
+--失败<code class="notranslate">select * from students limit 2 *（6-1）,2;</code><br>
+--失败<code class="notranslate">select * from students limit 10,2 order by age asc; --正确</code>select * from students`</p>
+<h2>7.连接查询</h2>
+<h2>8.自关联</h2>
+<h2>9.子查询</h2></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
@@ -262,7 +306,7 @@ if(""!=""){
 </script></div>
 </body>
 <script>
-var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
 var utterancesLoad=0;
 
 let themeSettings={
@@ -335,7 +379,70 @@ function iFrameLoading(){
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
 
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
 
 </script>
 
